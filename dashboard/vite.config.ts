@@ -8,6 +8,7 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true, // bind to all interfaces (e.g. when exposing the dev server remotely)
+    allowedHosts: ["paymesh.sabiedu.online"],
     proxy: {
       "/registry": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/agent": { target: "http://127.0.0.1:8001", changeOrigin: true },
