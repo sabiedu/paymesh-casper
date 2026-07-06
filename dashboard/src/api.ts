@@ -2,7 +2,7 @@
 // Set VITE_NODE_URL (or the form in the header) to point at a node/relayer.
 // In live mode this can be swapped for CSPR.cloud / Casper RPC queries.
 
-import type { AgentCallResult, MarketplaceStats, PaymentRecord, RatePayload, RegisterServicePayload, Review, ServiceInfo, StakePayload } from "./types";
+import type { AgentCallResult, MarketplaceStats, ObserveMetrics, PaymentRecord, RatePayload, RegisterServicePayload, Review, ServiceInfo, StakePayload } from "./types";
 
 // Default to "" (relative) so the Vite proxy handles API calls on the same origin.
 // This means remote visitors (via cloudflare tunnel) get the API transparently.
@@ -75,6 +75,14 @@ export async function checkHealth(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Observability — aggregated analytics
+// ---------------------------------------------------------------------------
+
+export async function fetchObserveMetrics(): Promise<ObserveMetrics> {
+  return getJson<ObserveMetrics>("/observe/metrics");
 }
 
 // ---------------------------------------------------------------------------

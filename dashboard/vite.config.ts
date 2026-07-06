@@ -15,6 +15,7 @@ export default defineConfig({
       "/recent_payments": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/demo": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/serve": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/observe": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/health": { target: "http://127.0.0.1:8001", changeOrigin: true },
     },
   },

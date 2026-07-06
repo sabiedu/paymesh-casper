@@ -36,6 +36,7 @@ from pydantic import BaseModel
 from .demo_endpoints import mount_demo_endpoints
 from .facilitator import create_facilitator_app
 from .ledger import LocalLedger, get_ledger, set_ledger
+from .observe_endpoints import mount_observe_endpoints
 
 # Import via the sdk package path.
 import os
@@ -264,6 +265,9 @@ def create_paymesh_node_app(node_base_url: str = DEFAULT_NODE_URL) -> FastAPI:
             "total_volume_cspr": round(motes_to_cspr(sum(p.amount_motes for p in recs)), 6),
             "services": [_svc_dict(s) for s in services],
         }
+
+    # --- Observability analytics (/observe/metrics) -------------------------
+    mount_observe_endpoints(app)
 
     # --- Demo Console (interactive lifecycle endpoints + /serve/{id}) -------
     mount_demo_endpoints(app, node_base_url=node_base_url)
