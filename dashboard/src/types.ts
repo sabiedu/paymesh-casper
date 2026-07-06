@@ -44,3 +44,51 @@ export interface Review {
   review: string;
   timestamp: number;
 }
+
+// ---- interactive marketplace types (provider form + x402 calls) ----
+
+/** Body for `POST /registry/services`. */
+export interface RegisterServicePayload {
+  provider: string;
+  service_id: string;
+  name: string;
+  endpoint: string;
+  price_per_call_cspr: number;
+  staking_amount_cspr: number;
+  description?: string;
+}
+
+/** Body for `POST /registry/services/{id}/stake`. */
+export interface StakePayload {
+  provider: string;
+  amount_cspr: number;
+}
+
+/** Body for `POST /registry/services/{id}/rate`. */
+export interface RatePayload {
+  reviewer: string;
+  rating: number;
+  review?: string;
+}
+
+/** Shape returned by `POST /agent/call` (a full x402 consumer flow). */
+export interface AgentCallResult {
+  success: boolean;
+  data: Record<string, unknown> | null;
+  amount_paid_cspr: number;
+  settlement_id: string;
+  consumer: string;
+  service_id: string;
+  error?: string;
+}
+
+/** A single step in the animated x402 payment flow. */
+export type FlowStepState = "pending" | "active" | "done" | "error";
+
+export interface FlowStep {
+  id: string;
+  label: string;
+  tone: "neutral" | "danger" | "success";
+  state: FlowStepState;
+}
+

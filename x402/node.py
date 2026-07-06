@@ -33,6 +33,7 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from .demo_endpoints import mount_demo_endpoints
 from .facilitator import create_facilitator_app
 from .ledger import LocalLedger, get_ledger, set_ledger
 
@@ -86,7 +87,16 @@ class DepositReq(BaseModel):
     amount_cspr: float
 
 
-def create_paymesh_node_app() -> FastAPI:
+class AgentCallReq(BaseModel):
+    service_id: str
+    wallet: str = ""
+
+
+# The dashboard demo node always runs on this port (see demo/serve_demo.py).
+DEFAULT_NODE_URL = "http://127.0.0.1:8001"
+
+
+def create_paymesh_node_app(node_base_url: str = DEFAULT_NODE_URL) -> FastAPI:
     # Compose: facilitator (x402 verify/settle + ledger reads) + registry router.
     app = create_facilitator_app()
     app.title = "PayMesh Node"
@@ -96,6 +106,96 @@ def create_paymesh_node_app() -> FastAPI:
     def deposit(req: DepositReq):
         get_ledger().deposit(req.account, cspr_to_motes(req.amount_cspr))
         return {"ok": True, "balance_cspr": motes_to_cspr(get_ledger().balance_of(req.account))}
+
+    @app.post("/agent/call")
+    def agent_call(req: AgentCallReq):
+        """Run the full x402 consumer flow server-side and return the result.
+
+        This lets the dashboard trigger a real paid call (the same flow
+        ``demo/consumer_agent.py`` performs) with a single click:
+
+            1. Generate a fresh consumer identity (Casper Ed25519).
+            2. Fund the consumer's escrow balance (10 CSPR) so the facilitator
+               can settle per-call payments.
+            3. Look the service up in the registry (must exist + be active).
+            4. Call it via x402 (402 → sign → pay → 200 → settle).
+            5. Return the decoded data + settlement info.
+
+        Services registered through the UI that don't have a real provider
+        backend will fail at step 4 — we catch that and return a friendly
+        error so the dashboard can show a helpful message.
+        """
+        from paymesh import HttpContractBackend, PayMeshClient, generate_account
+
+        node_url = node_base_url
+
+        try:
+            acct = generate_account("consumer-agent")
+            client = PayMeshClient(
+                account=acct,
+                backend=HttpContractBackend(node_url),
+                facilitator_url=node_url,
+            )
+            client.deposit(10.0)
+
+            svc = client.get_service(req.service_id)
+            if svc is None:
+                raise HTTPException(404, "service not found")
+            if not svc.active:
+                raise HTTPException(400, "service is not active (stake it first)")
+
+            kwargs = {}
+            if req.wallet:
+                kwargs["wallet"] = req.wallet
+
+            result = client.call_service(req.service_id, **kwargs)
+        except HTTPException:
+            raise
+        except Exception as exc:  # network/timeout/settlement failures
+            log.warning("agent_call for %s failed: %s", req.service_id, exc)
+            return {
+                "success": False,
+                "data": None,
+                "amount_paid_cspr": 0.0,
+                "settlement_id": "",
+                "consumer": "",
+                "service_id": req.service_id,
+                "error": (
+                    "The x402 call could not reach the provider's endpoint. "
+                    "This service was listed on the marketplace but has no "
+                    "running paid backend. Try the built-in risk-score-api."
+                ),
+            }
+
+        # A successful handshake settles a payment. If settlement didn't happen
+        # (e.g. the endpoint 404'd instead of returning 402) surface a helpful
+        # message rather than a half-empty success payload.
+        if not result.success:
+            log.info("agent_call for %s did not settle", req.service_id)
+            return {
+                "success": False,
+                "data": result.data,
+                "amount_paid_cspr": 0.0,
+                "settlement_id": "",
+                "consumer": acct.public_account_hex,
+                "service_id": req.service_id,
+                "error": (
+                    "This service is listed on the marketplace but its provider "
+                    "endpoint isn't serving a paid route yet — the call didn't "
+                    "trigger an x402 payment. The built-in risk-score-api is "
+                    "fully wired up and callable."
+                ),
+            }
+
+        return {
+            "success": result.success,
+            "data": result.data,
+            "amount_paid_cspr": round(result.amount_paid_motes / 1e9, 6),
+            "settlement_id": result.settlement_id,
+            "consumer": acct.public_account_hex,
+            "service_id": req.service_id,
+        }
+
 
     @app.post("/registry/services")
     def register(req: RegisterReq):
@@ -164,6 +264,9 @@ def create_paymesh_node_app() -> FastAPI:
             "total_volume_cspr": round(motes_to_cspr(sum(p.amount_motes for p in recs)), 6),
             "services": [_svc_dict(s) for s in services],
         }
+
+    # --- Demo Console (interactive lifecycle endpoints + /serve/{id}) -------
+    mount_demo_endpoints(app, node_base_url=node_base_url)
 
     return app
 

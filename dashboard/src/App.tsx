@@ -1,11 +1,48 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { MarketplaceStats, PaymentRecord, ServiceInfo } from "./types";
-import { checkHealth, fetchRecentPayments, fetchServices, fetchStats, getBaseUrl, setBaseUrl } from "./api";
+import {
+  checkHealth,
+  fetchRecentPayments,
+  fetchServices,
+  fetchStats,
+} from "./api";
 import ServiceCard from "./components/ServiceCard";
 import TransactionFeed from "./components/TransactionFeed";
+import ListServiceModal, { type ListResult } from "./components/ListServiceModal";
+import DemoConsole from "./components/DemoConsole";
+
+function usePulse<T>(value: T): boolean {
+  const prev = useRef<T>(value);
+  const [pulse, setPulse] = useState(false);
+  useEffect(() => {
+    if (prev.current !== value) {
+      prev.current = value;
+      setPulse(true);
+      const t = window.setTimeout(() => setPulse(false), 750);
+      return () => window.clearTimeout(t);
+    }
+  }, [value]);
+  return pulse;
+}
+
+function Stat({
+  label,
+  value,
+}: {
+  label: string;
+  value: number | string;
+}) {
+  const pulse = usePulse(value);
+  return (
+    <div className={`stat ${pulse ? "pulse" : ""}`} key={label}>
+      <div className="stat-value">{value}</div>
+      <div className="stat-label">{label}</div>
+    </div>
+  );
+}
 
 function StatBar({ stats }: { stats: MarketplaceStats | null }) {
-  const items = [
+  const items: { label: string; value: number | string }[] = [
     { label: "Services", value: stats?.service_count ?? 0 },
     { label: "Active", value: stats?.active_services ?? 0 },
     { label: "Staked (CSPR)", value: (stats?.total_staked_cspr ?? 0).toFixed(2) },
@@ -15,13 +52,16 @@ function StatBar({ stats }: { stats: MarketplaceStats | null }) {
   return (
     <div className="stat-bar">
       {items.map((it) => (
-        <div className="stat" key={it.label}>
-          <div className="stat-value">{it.value}</div>
-          <div className="stat-label">{it.label}</div>
-        </div>
+        <Stat key={it.label} label={it.label} value={it.value} />
       ))}
     </div>
   );
+}
+
+interface Toast {
+  id: number;
+  text: string;
+  tone: "success" | "error";
 }
 
 export default function App() {
@@ -30,7 +70,16 @@ export default function App() {
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [online, setOnline] = useState(false);
-  const [nodeInput, setNodeInput] = useState(getBaseUrl());
+  const [modalOpen, setModalOpen] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const pushToast = useCallback((text: string, tone: Toast["tone"] = "success") => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, text, tone }]);
+    window.setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4200);
+  }, []);
 
   const refresh = useCallback(async () => {
     const [ok, s, sv, pay] = await Promise.all([
@@ -51,12 +100,18 @@ export default function App() {
     return () => clearInterval(id);
   }, [refresh]);
 
-  const applyNode = () => {
-    setBaseUrl(nodeInput.trim());
-    refresh();
-  };
-
   const selectedSvc = services.find((s) => s.service_id === selected) || null;
+
+  const handleListed = useCallback(
+    async (res: ListResult) => {
+      setModalOpen(false);
+      pushToast(`✓ ${res.serviceId} deployed & staked`);
+      await refresh();
+      // surface the new card
+      setSelected(res.serviceId);
+    },
+    [refresh, pushToast]
+  );
 
   return (
     <div className="app">
@@ -69,30 +124,35 @@ export default function App() {
           </div>
         </div>
         <div className="node-form">
-          <span className={`status ${online ? "ok" : "down"}`}>● {online ? "node online" : "node offline"}</span>
-          <input
-            value={nodeInput}
-            onChange={(e) => setNodeInput(e.target.value)}
-            placeholder="http://127.0.0.1:8001"
-            onKeyDown={(e) => e.key === "Enter" && applyNode()}
-          />
-          <button onClick={applyNode}>Connect</button>
+          <span className={`status ${online ? "ok" : "down"}`}>
+            ● {online ? "node online" : "node offline"}
+          </span>
+          <button className="btn-grad" onClick={() => setModalOpen(true)}>
+            + List a Service
+          </button>
         </div>
       </header>
 
       <StatBar stats={stats} />
 
+      <DemoConsole services={services} onAfterAction={refresh} />
+
       <main className="grid">
         <section className="col services-col">
           <div className="col-head">
             <h2>Marketplace Services</h2>
-            <span className="muted">{services.length} registered</span>
+            <span className="muted">
+              {services.length} registered · click a card, then <strong>Call via x402</strong>
+            </span>
           </div>
           <div className="services">
             {services.length === 0 ? (
               <div className="card empty">
                 <p>No services registered yet.</p>
-                <p className="muted">Run <code>python demo/run_demo.py</code> to register a provider agent.</p>
+                <p className="muted">
+                  Click <code>+ List a Service</code> above, or run{" "}
+                  <code>python demo/serve_demo.py</code>.
+                </p>
               </div>
             ) : (
               services.map((s) => (
@@ -100,7 +160,9 @@ export default function App() {
                   key={s.service_id}
                   svc={s}
                   selected={s.service_id === selected}
-                  onClick={() => setSelected(s.service_id === selected ? null : s.service_id)}
+                  onClick={() =>
+                    setSelected(s.service_id === selected ? null : s.service_id)
+                  }
                 />
               ))
             )}
@@ -117,12 +179,39 @@ export default function App() {
                 <span className="badge">{selectedSvc.service_id}</span>
               </div>
               <dl className="detail-grid">
-                <div><dt>Endpoint</dt><dd><code>{selectedSvc.endpoint}</code></dd></div>
-                <div><dt>Provider</dt><dd><code>{selectedSvc.provider}</code></dd></div>
-                <div><dt>Price / call</dt><dd>{selectedSvc.price_per_call_cspr.toFixed(6)} CSPR</dd></div>
-                <div><dt>Stake</dt><dd>{(selectedSvc.stake_amount_cspr ?? selectedSvc.staking_amount_cspr).toFixed(3)} CSPR</dd></div>
-                <div><dt>Average rating</dt><dd>{selectedSvc.average_rating.toFixed(2)} / 5</dd></div>
-                <div><dt>Ratings</dt><dd>{selectedSvc.total_ratings}</dd></div>
+                <div>
+                  <dt>Endpoint</dt>
+                  <dd>
+                    <code>{selectedSvc.endpoint}</code>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Provider</dt>
+                  <dd>
+                    <code>{selectedSvc.provider}</code>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Price / call</dt>
+                  <dd>{selectedSvc.price_per_call_cspr.toFixed(6)} CSPR</dd>
+                </div>
+                <div>
+                  <dt>Stake</dt>
+                  <dd>
+                    {(
+                      selectedSvc.stake_amount_cspr ?? selectedSvc.staking_amount_cspr
+                    ).toFixed(3)}{" "}
+                    CSPR
+                  </dd>
+                </div>
+                <div>
+                  <dt>Average rating</dt>
+                  <dd>{selectedSvc.average_rating.toFixed(2)} / 5</dd>
+                </div>
+                <div>
+                  <dt>Ratings</dt>
+                  <dd>{selectedSvc.total_ratings}</dd>
+                </div>
               </dl>
             </div>
           )}
@@ -130,8 +219,34 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <span>PayMesh · <a href="https://x402.org" target="_blank" rel="noreferrer">x402</a> · <a href="https://casper.network" target="_blank" rel="noreferrer">Casper</a> · Odra smart contracts</span>
+        <span>
+          PayMesh ·{" "}
+          <a href="https://x402.org" target="_blank" rel="noreferrer">
+            x402
+          </a>{" "}
+          ·{" "}
+          <a href="https://casper.network" target="_blank" rel="noreferrer">
+            Casper
+          </a>{" "}
+          · Odra smart contracts
+        </span>
       </footer>
+
+      {modalOpen && (
+        <ListServiceModal
+          onClose={() => setModalOpen(false)}
+          onSubmitted={handleListed}
+        />
+      )}
+
+      {/* toast stack */}
+      <div className="toast-stack">
+        {toasts.map((t) => (
+          <div key={t.id} className={`toast ${t.tone}`}>
+            {t.text}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

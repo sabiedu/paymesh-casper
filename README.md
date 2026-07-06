@@ -141,6 +141,49 @@ python demo/provider_agent.py
 python demo/consumer_agent.py
 ```
 
+## Interactive Demo Console
+
+The dashboard ships with a **Live Demo Console** — a one-click control panel that
+runs the *entire* agent marketplace lifecycle from the UI, no terminal needed.
+Point a browser at the dashboard and click a button to watch real x402 payments
+settle in real time.
+
+```bash
+# 1. Start the node (facilitator + registry + ledger) + a seeded provider
+python demo/serve_demo.py
+
+# 2. In another shell, start the dashboard
+cd dashboard && npm run dev
+# → open http://localhost:5173
+```
+
+**Control buttons:**
+
+- 🟣 **Register Provider Agent** — generates an identity, registers a random
+  service (sentiment / price-oracle / wallet-screening / DeFi-yield / NFT), stakes
+  CSPR, and mounts a callable x402 paid route. The new service appears in the
+  marketplace instantly.
+- 🔵 **Launch Consumer Agent** — generates + funds a consumer and makes **one**
+  real paid call (402 → 0.05 CSPR → 200 → settle). Watch the payment fire across
+  the x402 flow visualization.
+- 🟢 **Run Full Demo Flow** — the one-click "wow": register → stake → 3–4 paid
+  calls → rate. Every transaction lands in the live stats + settlement feed.
+
+**Live Activity Log** streams each step (provider generated, 402→200, settlement
+recorded, rated 5/5…) with color-coded badges and a slide-in animation.
+
+These endpoints wrap the existing SDK (`PayMeshClient`, `generate_account`,
+`x402_fetch`) — same code paths as `demo/consumer_agent.py`:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/demo/register-provider` | POST | Register + stake a random provider service |
+| `/demo/consumer-call` | POST | One real x402 paid call from a fresh consumer |
+| `/demo/run-full-flow` | POST | Full lifecycle in a single call |
+| `/demo/activity` | GET | Recent activity events (live log feed) |
+| `/demo/catalog` | GET | Preset service catalog |
+| `/serve/{service_id}` | GET/POST | x402 paid route for a demo service |
+
 ## Contract Build
 
 ```bash

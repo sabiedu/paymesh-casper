@@ -10,7 +10,10 @@ export default defineConfig({
     host: true, // bind to all interfaces (needed for cloudflared tunnel)
     proxy: {
       "/registry": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/agent": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/recent_payments": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/demo": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/serve": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/health": { target: "http://127.0.0.1:8001", changeOrigin: true },
     },
   },
