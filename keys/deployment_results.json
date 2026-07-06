@@ -1,0 +1,32 @@
+{
+  "network": "casper-test",
+  "deployer_account": "0203358a59f8208973c70520fbc0ac07776dd3e2b80c10c0c7c164b9122bbc25d9fc",
+  "deployer_account_hash": "account-hash-4044a2da07e13b691d73a905ff2a1a0eaa285cb3897ad0e769f1b1421197356b",
+  "rpc_url": "https://node.testnet.cspr.cloud/rpc",
+  "gas_used_per_contract": 800000000000,
+  "total_gas_used": 3200000000000,
+  "balance_remaining": 2589449770406,
+  "deployment_date": "2026-07-06",
+  "contracts": {
+    "ServiceRegistry": {
+      "deploy_hash": "01bef2623188133485c00144048a2897e0697c35e59f83b309da881443a377b9",
+      "package_hash": "hash-6bab7762f65238d994224822492e7e6b026c702168a26bd1474f92b1ddbe765c",
+      "status": "deployed"
+    },
+    "Settlement": {
+      "deploy_hash": "670733ef6068f9a720e554447bbbbd24218b56447efbdba02bca03b4b7b54aa1",
+      "package_hash": "hash-2de7ebd31967202b7452c48a14940bec603bbaebee0fe0a5f14e8a4e96ba889a",
+      "status": "deployed"
+    },
+    "Staking": {
+      "deploy_hash": "21fe2c7783b2ebff47f80c6d5bf4329156aa0a055690039aa78e0ff299e19373",
+      "package_hash": "hash-4e30962132c6515ce5791e17ef2e73d4ecda8e036a0153802bf0f49d2409af5d",
+      "status": "deployed"
+    },
+    "Reputation": {
+      "deploy_hash": "4de3da53d179f781ad6e3d02a6ba78c47d7e54f26e01aa0953a05cc97fbce4c1",
+      "package_hash": "hash-148f577b3bcc8a925f27a4b290945d3574ed63c9bf09b44b3fbbf2802f1b99e9",
+      "status": "deployed"
+    }
+  }
+}

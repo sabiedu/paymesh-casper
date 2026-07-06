@@ -1,0 +1,7 @@
+{
+  "algorithm": "ed25519",
+  "account_hash": "34afd49bb1987fc2f67f50c71922f711760c15caee8e44faf20b5f2793ab4830",
+  "account_key": "015712efc980b6682c188d5448217c7df176af4ac14a5e46a632a2f2bce1a3c016",
+  "public_key_hex": "025712efc980b6682c188d5448217c7df176af4ac14a5e46a632a2f2bce1a3c016",
+  "private_key_hex": "1d4104051617b93d3795d208b860a26a3918275f7b765c2095ffc2bf7ae8a775"
+}
