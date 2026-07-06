@@ -4,8 +4,11 @@
 
 import type { MarketplaceStats, PaymentRecord, Review, ServiceInfo } from "./types";
 
+// Default to "" (relative) so the Vite proxy handles API calls on the same origin.
+// This means remote visitors (via cloudflare tunnel) get the API transparently.
+// To point at a different node, set VITE_NODE_URL or use the "Connect" form.
 const NODE_URL =
-  (import.meta as any).env?.VITE_NODE_URL || "http://127.0.0.1:8001";
+  (import.meta as any).env?.VITE_NODE_URL || "";
 
 let baseUrl = NODE_URL.replace(/\/$/, "");
 

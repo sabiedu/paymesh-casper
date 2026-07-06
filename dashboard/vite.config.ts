@@ -1,9 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Point this at your PayMesh node (facilitator + registry + ledger).
-// Override with: VITE_NODE_URL=http://your-host:8001 npm run dev
+// The Vite dev server proxies API calls to the PayMesh node (:8001),
+// so everything is same-origin — no CORS, one public hostname needed.
 export default defineConfig({
   plugins: [react()],
-  server: { port: 5173 },
+  server: {
+    port: 5173,
+    host: true, // bind to all interfaces (needed for cloudflared tunnel)
+    proxy: {
+      "/registry": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/recent_payments": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/health": { target: "http://127.0.0.1:8001", changeOrigin: true },
+    },
+  },
 });
