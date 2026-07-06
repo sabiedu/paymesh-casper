@@ -13,9 +13,23 @@ export default defineConfig({
       "/registry": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/agent": { target: "http://127.0.0.1:8001", changeOrigin: true },
       "/recent_payments": { target: "http://127.0.0.1:8001", changeOrigin: true },
-      "/demo": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/demo": {
+        target: "http://127.0.0.1:8001",
+        changeOrigin: true,
+        // Let the SPA handle /demo page route; only proxy API sub-paths
+        bypass: (req) => {
+          if (req.method === "GET" && /^\/demo\/?(\?.*)?$/.test(req.url)) return "/index.html";
+        },
+      },
       "/serve": { target: "http://127.0.0.1:8001", changeOrigin: true },
-      "/observe": { target: "http://127.0.0.1:8001", changeOrigin: true },
+      "/observe": {
+        target: "http://127.0.0.1:8001",
+        changeOrigin: true,
+        // Let the SPA handle /observe page route; only proxy /observe/metrics
+        bypass: (req) => {
+          if (req.method === "GET" && /^\/observe\/?(\?.*)?$/.test(req.url)) return "/index.html";
+        },
+      },
       "/health": { target: "http://127.0.0.1:8001", changeOrigin: true },
     },
   },
