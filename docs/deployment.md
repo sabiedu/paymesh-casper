@@ -1,7 +1,7 @@
 # Deployment
 
 Everything you need to build the contracts, deploy them to Casper testnet, and run
-the node + dashboard locally or behind a public tunnel.
+the node + dashboard locally or on a public server.
 
 ---
 
@@ -194,8 +194,7 @@ same-origin — no CORS, one hostname. From `dashboard/vite.config.ts`:
 ```ts
 server: {
   port: 5173,
-  host: true,                       // bind all interfaces (needed for tunneling)
-  allowedHosts: ["paymesh.sabiedu.online", ".sabiedu.online"],
+  host: true,                       // bind all interfaces
   proxy: {
     "/registry":         { target: "http://127.0.0.1:8001", changeOrigin: true },
     "/agent":            { target: "http://127.0.0.1:8001", changeOrigin: true },
@@ -217,28 +216,7 @@ The `bypass` functions return `index.html` for the bare `/demo` and `/observe`
 
 ---
 
-## 5. Public hosting (Cloudflare Tunnel)
-
-To expose the dashboard publicly (e.g. for judges), run a Cloudflare Tunnel
-(`cloudflared`) pointed at the Vite dev server:
-
-```bash
-# 1. Node + seeded marketplace (must already be running)
-python demo/serve_demo.py
-
-# 2. Dashboard
-cd dashboard && npm run dev
-
-# 3. Tunnel :5173 to a public hostname
-cloudflared tunnel --url http://localhost:5173 \
-  --hostname paymesh.sabiedu.online
-```
-
-Add your tunnel hostname to `allowedHosts` in `vite.config.ts` so Vite accepts it.
-
----
-
-## 6. Run the demo agents (CLI)
+## 5. Run the demo agents (CLI)
 
 For a terminal-driven demo instead of the UI:
 
@@ -265,7 +243,7 @@ python demo/run_demo.py
 
 ---
 
-## 7. Testing
+## 6. Testing
 
 ```bash
 # Rust integration tests (OdraVM)

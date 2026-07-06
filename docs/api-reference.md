@@ -504,7 +504,7 @@ in-memory marketplace state — no faked numbers.
 
 ### `GET /health`
 
-Liveness probe used by the Vite proxy and any load balancer / tunnel.
+Liveness probe used by the Vite proxy and any load balancer.
 
 ```json
 { "status": "ok" }

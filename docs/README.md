@@ -25,7 +25,7 @@ SDKs, and the operational dashboards.
 | 3 | [**API Reference**](api-reference.md) | Every REST endpoint exposed by the node, with request/response schemas |
 | 4 | [**SDK Guide**](sdk-guide.md) | Python + TypeScript SDK usage, full code examples, both agent flows |
 | 5 | [**x402 Payments**](x402-payments.md) | How the 402 → pay → 200 protocol works in PayMesh |
-| 6 | [**Deployment**](deployment.md) | Build, deploy to testnet, run the node + dashboard, tunneling |
+| 6 | [**Deployment**](deployment.md) | Build, deploy to testnet, run the node + dashboard |
 | 7 | [**Roadmap**](roadmap.md) | Testnet → mainnet → cross-chain product roadmap |
 
 ---
