@@ -1,0 +1,34 @@
+// PayMesh JS/TS SDK — public API.
+// The x402 agent marketplace on Casper, for browser & Node.
+
+export { PayMeshClient } from "./client.js";
+export type { PayMeshClientOptions } from "./client.js";
+export { HttpContractBackend } from "./backend.js";
+export { x402Fetch, PaymentError } from "./x402.js";
+export type { PaidResponse } from "./x402.js";
+export {
+  generateAccount,
+  accountFromPrivateKey,
+  canonicalAuthorization,
+  signMessage,
+  verifySignature,
+  newNonce,
+} from "./crypto.js";
+export type { Account } from "./crypto.js";
+export {
+  MOTES_PER_CSPR,
+  motesToCspr,
+  csprToMotes,
+} from "./types.js";
+export type {
+  ServiceInfo,
+  ReputationAggregate,
+  Review,
+  CallResult,
+  PaymentRequirements,
+  PaymentPayload,
+  PaymentPayloadInner,
+  SettleResponse,
+} from "./types.js";
+
+export const VERSION = "1.0.0";

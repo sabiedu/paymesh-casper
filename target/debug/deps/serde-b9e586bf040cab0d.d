@@ -1,0 +1,14 @@
+C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\deps\serde-b9e586bf040cab0d.d: C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\build\serde-e9e3bc9ef89cd147\out/private.rs
+
+C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\deps\libserde-b9e586bf040cab0d.rlib: C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\build\serde-e9e3bc9ef89cd147\out/private.rs
+
+C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\deps\libserde-b9e586bf040cab0d.rmeta: C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\build\serde-e9e3bc9ef89cd147\out/private.rs
+
+C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs:
+C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs:
+C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs:
+C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs:
+C:\Users\Sabiedu\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs:
+C:\Users\Sabiedu\.qwenpaw\workspaces\hack_2\paymesh-casper\target\debug\build\serde-e9e3bc9ef89cd147\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\Sabiedu\\.qwenpaw\\workspaces\\hack_2\\paymesh-casper\\target\\debug\\build\\serde-e9e3bc9ef89cd147\\out

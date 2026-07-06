@@ -1,0 +1,28 @@
+{
+  "name": "@paymesh/sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for PayMesh — the x402 agent marketplace on Casper",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test --experimental-vm-modules dist/test/*.test.js || true"
+  },
+  "keywords": ["paymesh", "x402", "casper", "ai-agents", "payments", "defi"],
+  "license": "MIT",
+  "dependencies": {
+    "@noble/ed25519": "^2.1.0",
+    "@noble/hashes": "^1.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.10.0"
+  }
+}

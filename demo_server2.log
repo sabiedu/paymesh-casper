@@ -1,0 +1,17 @@
+2026-07-04 22:38:39,279 INFO starting PayMesh node on :8001 …
+2026-07-04 22:38:39,990 INFO registered service risk-score-api (0.05 CSPR/call)
+2026-07-04 22:38:40,030 INFO staked 5.0 CSPR on risk-score-api
+2026-07-04 22:38:40,031 INFO mounted paid route /risk-score (50000000 motes)
+2026-07-04 22:38:40,031 INFO starting provider on :8002 …
+2026-07-04 22:38:40,708 INFO paying 50000000 motes to 014acf62d284… for http://127.0.0.1:8002/risk-score
+2026-07-04 22:38:40,739 INFO settled 50000000 motes 01cfb6b1e52e->014acf62d284 for risk-score-api (local-00000000)
+2026-07-04 22:38:40,785 INFO paying 50000000 motes to 014acf62d284… for http://127.0.0.1:8002/risk-score
+2026-07-04 22:38:40,815 INFO settled 50000000 motes 01cfb6b1e52e->014acf62d284 for risk-score-api (local-00000001)
+2026-07-04 22:38:40,846 INFO paying 50000000 motes to 014acf62d284… for http://127.0.0.1:8002/risk-score
+2026-07-04 22:38:40,878 INFO settled 50000000 motes 01cfb6b1e52e->014acf62d284 for risk-score-api (local-00000002)
+2026-07-04 22:38:40,910 INFO rated risk-score-api 5/5 (avg 5.00 over 1)
+2026-07-04 22:38:40,910 INFO seeded 3 payments + rating. Dashboard data ready.
+2026-07-04 22:38:40,910 INFO node: http://127.0.0.1:8001  |  provider: http://127.0.0.1:8002/risk-score
+2026-07-04 22:38:40,910 INFO dashboard: cd dashboard && npm run dev   (VITE_NODE_URL defaults to http://127.0.0.1:8001)
+2026-07-04 22:38:40,910 INFO press Ctrl+C to stop.
+2026-07-04 22:38:45,430 INFO settled 50000000 motes 0109e525be82->014acf62d284 for risk-score-api (local-00000003)

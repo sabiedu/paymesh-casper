@@ -1,0 +1,1 @@
+target/  node_modules/  __pycache__/  *.log  .pytest_cache/  .env

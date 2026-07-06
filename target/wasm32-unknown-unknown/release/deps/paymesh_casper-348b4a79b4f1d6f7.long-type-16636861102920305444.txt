@@ -1,0 +1,1 @@
+[odra::casper_types::U512; casper_types::::system::auction::bid::vesting::{impl#2}::{constant#0}]

@@ -1,0 +1,11 @@
+[[contracts]]
+fqn = "service_registry::ServiceRegistry"
+
+[[contracts]]
+fqn = "staking::Staking"
+
+[[contracts]]
+fqn = "settlement::Settlement"
+
+[[contracts]]
+fqn = "reputation::Reputation"
