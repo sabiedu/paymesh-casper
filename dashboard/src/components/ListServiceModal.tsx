@@ -45,7 +45,7 @@ export default function ListServiceModal({
     if (!touchedId) setServiceId(slugify(name));
   }, [name, touchedId]);
 
-  const derivedEndpoint = `http://127.0.0.1:8002/${serviceId || "service"}`;
+  const derivedEndpoint = `${window.location.origin}/serve/${serviceId || "service"}`;
   const endpoint = endpointOverride.trim() || derivedEndpoint;
 
   const priceNum = parseFloat(price);

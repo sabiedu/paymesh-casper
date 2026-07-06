@@ -76,13 +76,13 @@ export default function DashboardPage() {
                 <div>
                   <dt>Endpoint</dt>
                   <dd>
-                    <code>{selectedSvc.endpoint}</code>
+                    <code>{selectedSvc.endpoint.replace(/^https?:\/\/127\.0\.0\.1:8001/, window.location.origin)}</code>
                   </dd>
                 </div>
                 <div>
                   <dt>Provider</dt>
                   <dd>
-                    <code>{selectedSvc.provider}</code>
+                    <code>{selectedSvc.provider.slice(0, 10)}…{selectedSvc.provider.slice(-6)}</code>
                   </dd>
                 </div>
                 <div>
