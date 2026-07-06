@@ -55,46 +55,28 @@ def main():
     _wait(NODE_PORT)
     node_url = f"http://127.0.0.1:{NODE_PORT}"
 
-    # provider
-    prov_acct = generate_account("provider")
-    prov_client = PayMeshClient(account=prov_acct, backend=HttpContractBackend(node_url), facilitator_url=node_url)
-    endpoint = f"http://127.0.0.1:{PROVIDER_PORT}/risk-score"
-    try:
-        prov_client.register_service("risk-score-api", "DeFi Wallet Risk Score API", endpoint, 0.05, 5.0)
-    except Exception:
-        pass
-    prov_client.stake("risk-score-api", 5.0)
-
-    prov_app = create_provider_app(prov_acct, facilitator_url=node_url)
-
-    @prov_app.paid_route("/risk-score", price_motes=50_000_000, service_id="risk-score-api", description="DeFi risk score")
-    def risk_score(request):
-        import hashlib
-
-        w = request.query_params.get("wallet") or "0x" + "00" * 20
-        base = int(hashlib.sha256(w.encode()).hexdigest()[:8], 16) / 0xFFFFFFFF
-        score = round(min(0.99, max(0.01, 0.05 + base * 0.9 + random.uniform(-0.02, 0.02))), 3)
-        return {"service": "risk-score-api", "wallet": w, "risk_score": score, "label": "low" if score < 0.33 else "moderate" if score < 0.66 else "high", "model": "paymesh-risk-v1"}
-
-    log.info("starting provider on :%d …", PROVIDER_PORT)
-    _serve(prov_app, PROVIDER_PORT)
-    _wait(PROVIDER_PORT)
-
-    # seed a few paid calls + a rating so the dashboard is alive
-    con_acct = generate_account("consumer")
     import requests
 
-    requests.post(f"{node_url}/registry/deposit", json={"account": con_acct.public_account_hex, "amount_cspr": 10.0}, timeout=10)
-    con_client = PayMeshClient(account=con_acct, backend=HttpContractBackend(node_url), facilitator_url=node_url)
-    for i in range(3):
-        try:
-            con_client.call_service("risk-score-api", wallet="0x" + "".join(random.choice("0123456789abcdef") for _ in range(40)))
-        except Exception as e:
-            log.warning("seed call %d failed: %s", i, e)
-    con_client.rate_service("risk-score-api", 5, "fast & accurate risk scoring")
-    log.info("seeded 3 payments + rating. Dashboard data ready.")
-    log.info("node: %s  |  provider: %s", node_url, endpoint)
-    log.info("dashboard: cd dashboard && npm run dev   (VITE_NODE_URL defaults to %s)", node_url)
+    # --- seed multiple services via the demo endpoint so dashboard is rich ---
+    catalog = requests.get(f"{node_url}/demo/catalog", timeout=10).json()
+    catalog = catalog.get("services", catalog) if isinstance(catalog, dict) else catalog
+    log.info("seeding %d services from catalog…", len(catalog))
+
+    for item in catalog[:4]:
+        sid = requests.post(f"{node_url}/demo/register-provider", json={"service_id": item["service_id"]}, timeout=30).json()
+        svc = sid.get("service", sid)
+        real_id = svc.get("service_id", item["service_id"])
+        n_calls = random.randint(3, 6)
+        for _ in range(n_calls):
+            try:
+                requests.post(f"{node_url}/demo/consumer-call", json={"service_id": real_id}, timeout=15)
+            except Exception as e:
+                log.warning("seed call failed: %s", e)
+        log.info("  ✓ %s — %d paid calls", item.get("name", real_id), n_calls)
+
+    log.info("seeded marketplace with %d services + payments. Dashboard data ready.", len(catalog[:4]))
+    log.info("node: %s  |  provider: %s", node_url, f"http://127.0.0.1:{NODE_PORT}/serve")
+    log.info("dashboard: cd dashboard && npm run dev")
     log.info("press Ctrl+C to stop.")
     try:
         while True:
