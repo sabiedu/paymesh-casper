@@ -674,6 +674,7 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 }
 .kpi {
   position: relative; overflow: hidden;
+  min-width: 0;                       /* prevent grid blow-out on narrow viewports */
   background: var(--panel); border: 1px solid var(--border);
   border-radius: 16px; padding: 16px 17px 15px;
   box-shadow: var(--shadow); transition: transform .18s, box-shadow .18s;
@@ -698,12 +699,13 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 .kpi-amber .kpi-icon { color: #e08600; }
 .kpi-indigo .kpi-icon { color: #6366f1; }
 .kpi-teal .kpi-icon { color: #14b8a6; }
-.kpi-sub { font-size: 11px; font-weight: 700; color: var(--muted); }
+.kpi-sub { font-size: 11px; font-weight: 700; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .kpi-value {
-  font-size: 27px; font-weight: 780; letter-spacing: -0.6px; color: var(--text);
+  font-size: clamp(20px, 1.9vw, 27px); font-weight: 780; letter-spacing: -0.6px; color: var(--text);
   line-height: 1.1; font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;                   /* long uptime/large CSPR never breaks layout */
 }
-.kpi-label { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-top: 3px; }
+.kpi-label { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---- panels ---- */
 .panel {
@@ -724,6 +726,7 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 .panel-tag.green { color: var(--green); background: rgba(21, 163, 74, 0.10); }
 
 .observe-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.observe-row > * { min-width: 0; }            /* charts/hash cells can't blow out the grid */
 
 .chart-wrap { width: 100%; height: 240px; }
 .chart-tall { height: 300px; }
@@ -739,7 +742,7 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 .contract-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .contract-card {
   background: var(--panel-2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 15px 16px;
+  border-radius: 14px; padding: 15px 16px; min-width: 0;
 }
 .contract-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 .contract-name { font-size: 14.5px; font-weight: 720; color: var(--text); }
@@ -772,7 +775,7 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 
 /* ---- data table ---- */
 .table-scroll { overflow-x: auto; }
-.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 13px; }
 .data-table th {
   text-align: left; font-size: 11px; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.05em; color: var(--muted); padding: 0 14px 11px; border-bottom: 1px solid var(--border);
@@ -798,6 +801,7 @@ textarea.field-input { resize: vertical; min-height: 44px; }
 
 /* ---- network strip ---- */
 .net-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.net-grid > * { min-width: 0; }
 .net-item { display: flex; flex-direction: column; gap: 3px; }
 .net-link { text-decoration: none; transition: opacity .15s; }
 .net-link:hover { opacity: 0.7; }
