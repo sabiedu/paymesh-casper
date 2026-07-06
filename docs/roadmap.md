@@ -40,7 +40,7 @@ The marketplace is live and end-to-end functional on Casper testnet.
 - **Three dashboard surfaces**: marketplace overview, observability analytics
   (real KPIs, volume chart, revenue bars, reputation donut, contract status,
   agent registry), and an interactive one-click demo console.
-- **Cloudflare Tunnel hosting** for public demos.
+- **Self-hostable dashboard** — deploy to your preferred host for public demos.
 
 > _What we proved: agents can discover, pay per-call over HTTP, and settle on
 > Casper — with no intermediaries and full on-chain transparency._

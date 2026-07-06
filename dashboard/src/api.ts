@@ -5,7 +5,7 @@
 import type { AgentCallResult, MarketplaceStats, ObserveMetrics, PaymentRecord, RatePayload, RegisterServicePayload, Review, ServiceInfo, StakePayload } from "./types";
 
 // Default to "" (relative) so the Vite proxy handles API calls on the same origin.
-// This means remote visitors (via cloudflare tunnel) get the API transparently.
+// This means remote visitors get the API transparently on the same origin.
 // To point at a different node, set VITE_NODE_URL or use the "Connect" form.
 const NODE_URL =
   (import.meta as any).env?.VITE_NODE_URL || "";
