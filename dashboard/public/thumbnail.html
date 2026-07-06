@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PayMesh — Social Preview Card</title>
+<style>
+/* ============================================================
+   PayMesh social card — 1200×630 (og:image / GitHub preview)
+   Open this file, screenshot the card, done.
+   ============================================================ */
+:root{
+  --purple:#7c3aed; --pink:#ff3366; --ink:#15182a; --muted:#6c7187;
+  --grad:linear-gradient(135deg,#7c3aed 0%,#ff3366 100%);
+  --line:rgba(124,58,237,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  background:#0c0e16;
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;
+}
+.card{
+  width:1200px;height:630px;flex:none;min-width:1200px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(700px 420px at 86% -10%,rgba(124,58,237,.16),transparent 62%),
+    radial-gradient(620px 380px at -8% 112%,rgba(255,51,102,.14),transparent 60%),
+    linear-gradient(160deg,#ffffff 0%,#f5f6fc 60%,#eef0f9 100%);
+  color:var(--ink);letter-spacing:-.012em;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:58px 72px;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+}
+
+/* decorative animated mesh (subtle) */
+.mesh{position:absolute;inset:0;pointer-events:none;opacity:.55}
+.mesh::before{content:"";position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.20),transparent 70%);filter:blur(30px)}
+.mesh::after{content:"";position:absolute;bottom:-140px;left:-100px;width:440px;height:440px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,51,102,.18),transparent 70%);filter:blur(30px)}
+
+/* faint grid texture */
+.grid-bg{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(124,58,237,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.045) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000,transparent);mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,#000,transparent)}
+
+.content{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;justify-content:space-between}
+
+/* top: logo lockup */
+.lockup{display:flex;align-items:center;gap:20px}
+.logo-mark{
+  width:74px;height:74px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+  background:var(--grad);color:#fff;font-size:40px;line-height:1;font-weight:800;
+  box-shadow:0 14px 34px rgba(124,58,237,.42);
+}
+.wordmark{font-size:46px;font-weight:820;letter-spacing:-.02em;line-height:1}
+.wordmark .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* middle: tagline */
+.tagline-wrap{margin-top:-8px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(255,51,102,.12));border:1px solid var(--line);
+  font-size:15px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:24px}
+.eyebrow .dot{width:9px;height:9px;border-radius:50%;background:var(--purple);box-shadow:0 0 0 4px rgba(124,58,237,.18)}
+.headline{font-size:64px;font-weight:830;line-height:1.04;letter-spacing:-.03em;max-width:980px}
+.headline .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* badges */
+.badges{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.badge{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);
+  border-radius:13px;padding:13px 20px;font-size:18px;font-weight:720;color:var(--ink);
+  box-shadow:0 4px 16px rgba(20,24,70,.07)}
+.badge .chk{width:22px;height:22px;border-radius:50%;background:var(--grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex:none}
+
+/* bottom: ecosystem row */
+.foot{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:26px;
+  border-top:1px solid rgba(124,58,237,.14)}
+.foot-left{display:flex;align-items:center;gap:26px}
+.eco{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:760;color:var(--ink)}
+.eco .chip{font-size:13px;font-weight:800;letter-spacing:.06em;padding:5px 12px;border-radius:8px;color:#fff}
+.eco .chip.casper{background:linear-gradient(135deg,#e2231a,#ff5a3c)}
+.eco .chip.x402{background:var(--grad)}
+.builtwith{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.builtwith b{color:var(--purple)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid-bg"></div>
+  <div class="mesh"></div>
+
+  <div class="content">
+    <!-- logo lockup -->
+    <div class="lockup">
+      <div class="logo-mark">◆</div>
+      <div class="wordmark">Pay<span class="grad">Mesh</span></div>
+    </div>
+
+    <!-- tagline -->
+    <div class="tagline-wrap">
+      <div class="eyebrow"><span class="dot"></span> Live on Casper Testnet</div>
+      <div class="headline">The <span class="grad">x402 Agent Marketplace</span><br>on Casper</div>
+      <div class="badges">
+        <div class="badge"><span class="chk">✓</span> Odra Smart Contracts</div>
+        <div class="badge"><span class="chk">✓</span> x402 Payments</div>
+        <div class="badge"><span class="chk">✓</span> Live on Testnet</div>
+        <div class="badge"><span class="chk">✓</span> Python + JS SDK</div>
+      </div>
+    </div>
+
+    <!-- footer / ecosystem -->
+    <div class="foot">
+      <div class="foot-left">
+        <div class="eco"><span class="chip casper">CSPR</span> Casper</div>
+        <div class="eco"><span class="chip x402">402</span> x402</div>
+        <div class="eco"><span class="chip" style="background:linear-gradient(135deg,#1f8f5e,#15a34a)">ODRA</span> Odra</div>
+      </div>
+      <div class="builtwith">Built with <b>x402 + Odra</b> · Settled on-chain</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
